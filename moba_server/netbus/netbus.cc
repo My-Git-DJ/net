@@ -10,6 +10,7 @@ using namespace std;
 #include "session.h"
 #include "session_uv.h"
 #include "ws_protocol.h"
+#include "tp_protocol.h"
 
 #include "netbus.h"
 
@@ -21,6 +22,43 @@ extern "C" {
 		//test
 		s->send_data(body, len);
 		//end
+	}
+
+	static void
+	on_recv_tcp_data(uv_session* s) {
+		unsigned char* pkg_data = (unsigned char*)((s->long_pkg != NULL) ? s->long_pkg : s->recv_buf);
+
+		while (s->recved > 0)
+		{
+			int pkg_size = 0;
+			int head_size = 0;
+			
+			//pkg_size - head_size = body_size
+			if (!tp_protocol::read_header(pkg_data, s->recved, &pkg_size, &head_size)) {
+				break;
+			}
+
+			if (s->recved < pkg_size) {
+				break;
+			}
+
+			unsigned char* raw_data = pkg_data + head_size;
+			
+			//处理数据 收到一个完整的数据包
+			on_recv_client_cmd(s, raw_data, pkg_size - head_size);
+			//end
+
+			if (s->recved > pkg_size) {
+				memmove(pkg_data, pkg_data + pkg_size, s->recved - pkg_size);
+			}
+			s->recved -= pkg_size;
+
+			if (s->recved == 0 && s->long_pkg != NULL) {
+				free(s->long_pkg);
+				s->long_pkg = NULL;
+				s->long_pkg_size = 0;
+			}
+		}
 	}
 
 	static void 
@@ -138,7 +176,7 @@ extern "C" {
 		}
 		else //tcp socket
 		{
-
+			on_recv_tcp_data(s);
 		}
 	}
 

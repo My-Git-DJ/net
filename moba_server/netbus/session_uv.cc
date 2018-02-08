@@ -131,8 +131,8 @@ uv_session::send_data(unsigned char* body, int len) {
 	}
 	else // tcp 
 	{
-		w_buf = uv_buf_init((char*)body, len);
-		uv_write(w_req, (uv_stream_t*)&this->tcp_handler, &w_buf, 1, after_write);
+		//w_buf = uv_buf_init((char*)body, len);
+		//uv_write(w_req, (uv_stream_t*)&this->tcp_handler, &w_buf, 1, after_write);
 
 		int tp_pkg_len;
 		unsigned char* tp_pkg = tp_protocol::package(body, len, &tp_pkg_len);

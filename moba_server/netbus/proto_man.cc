@@ -104,7 +104,7 @@ proto_man::decode_cmd_msg(unsigned char* cmd, int cmd_len, struct cmd_msg** out_
 			return false;
 		}
 
-		if (p_m->ParseFromArray(cmd+ CMD_HEAD,cmd_len- CMD_HEAD)){
+		if (!p_m->ParseFromArray(cmd+ CMD_HEAD,cmd_len- CMD_HEAD)){
 			free(msg);
 			*out_msg = NULL;
 			release_message(p_m);
@@ -141,7 +141,7 @@ proto_man::encode_msg_to_raw(const struct cmd_msg* msg, int* out_len) {
 	int raw_len = 0;
 	unsigned char* raw_data = NULL;
 
-	out_len = 0;
+	*out_len = 0;
 
 	if (g_proto_type == PROTO_JSON) {
 		char* json_str = (char*)msg->body;

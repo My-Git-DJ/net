@@ -38,6 +38,9 @@
     <Filter Include="3rd\mjson">
       <UniqueIdentifier>{5ae8e848-9b40-4ad1-ba61-386cbb761022}</UniqueIdentifier>
     </Filter>
+    <Filter Include="apps\test\proto">
+      <UniqueIdentifier>{1175fee0-bfc0-4c3b-ae0f-bb018670fa38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\apps\test\main.cc">
@@ -169,6 +172,15 @@
     <ClCompile Include="..\..\3rd\mjson\json.c">
       <Filter>3rd\mjson</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\apps\test\proto\game.pb.cc">
+      <Filter>apps\test\proto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\apps\test\proto\pf_cmd_map.cc">
+      <Filter>apps\test\proto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\netbus\proto_man.cc">
+      <Filter>netbus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rd\libuv\include\android-ifaddrs.h">
@@ -281,6 +293,15 @@
     </ClInclude>
     <ClInclude Include="..\..\3rd\mjson\json.h">
       <Filter>3rd\mjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\apps\test\proto\game.pb.h">
+      <Filter>apps\test\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\apps\test\proto\pf_cmd_map.h">
+      <Filter>apps\test\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\netbus\proto_man.h">
+      <Filter>netbus</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

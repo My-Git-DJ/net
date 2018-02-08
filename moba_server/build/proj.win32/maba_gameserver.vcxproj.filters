@@ -35,6 +35,9 @@
     <Filter Include="3rd\crypto">
       <UniqueIdentifier>{e91edef0-2901-4fc4-a350-5562f7942680}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\mjson">
+      <UniqueIdentifier>{5ae8e848-9b40-4ad1-ba61-386cbb761022}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\apps\test\main.cc">
@@ -163,6 +166,9 @@
     <ClCompile Include="..\..\netbus\tp_protocol.cc">
       <Filter>netbus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3rd\mjson\json.c">
+      <Filter>3rd\mjson</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rd\libuv\include\android-ifaddrs.h">
@@ -272,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="..\..\netbus\tp_protocol.h">
       <Filter>netbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\mjson\json.h">
+      <Filter>3rd\mjson</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

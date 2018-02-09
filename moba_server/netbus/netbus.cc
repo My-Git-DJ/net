@@ -12,6 +12,7 @@ using namespace std;
 #include "ws_protocol.h"
 #include "tp_protocol.h"
 #include "proto_man.h"
+#include "service_man.h"
 
 #include "netbus.h"
 
@@ -20,23 +21,14 @@ extern "C" {
 	on_recv_client_cmd(uv_session* s , unsigned char* body,int len){
 		printf("client command !!!!!\n ");
 
-		//test
 		struct cmd_msg* msg = NULL;
 		if (proto_man::decode_cmd_msg(body, len, &msg)) {
-			unsigned char* encode_pkg = NULL;
-			int encode_len = 0;
-			encode_pkg = proto_man::encode_msg_to_raw(msg, &encode_len);
-			if (encode_pkg) {
-				s->send_data(encode_pkg, encode_len);
-				proto_man::msg_raw_free(encode_pkg);
+			if (!service_man::on_recv_cmd_msg((session*)s, msg)) {
+				s->close();
 			}
+
 			proto_man::cmd_msg_free(msg);
 		}
-		//end
-
-		//test
-		//s->send_data(body, len);
-		//end
 	}
 
 	static void
@@ -261,6 +253,7 @@ void netbus::start_ws_server(int port) {
 }
 
 void netbus::run() {
+	service_man::init();
 	uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 }
 

@@ -9,10 +9,13 @@ using namespace std;
 #include "uv.h"
 #include "session.h"
 #include "session_uv.h"
+#include "proto_man.h"
+#include "service_man.h"
 
 #include "../utils/cache_alloc.h"
 #include "ws_protocol.h"
 #include "tp_protocol.h"
+
 
 #define SESSION_CACHE_CAPACITY 6000
 #define WQ_CACHE_CAPCITY 4096
@@ -102,6 +105,8 @@ uv_session::close() {
 	if (this->is_shutdown) {
 		return;
 	}
+	//broadcast service client is disconnect
+	service_man::on_session_disconnect(this);
 
 	this->is_shutdown = true;
 	uv_shutdown_t* reg = &this->shutdown;
@@ -149,3 +154,13 @@ uv_session::get_address(int* port) {
 	return this->c_address;
 }
 
+void 
+uv_session::send_msg(struct cmd_msg* msg) {
+	unsigned char* encode_pkg = NULL;
+	int encode_len = 0;
+	encode_pkg = proto_man::encode_msg_to_raw(msg, &encode_len);
+	if (encode_pkg) {
+		this->send_data(encode_pkg, encode_len);
+		proto_man::msg_raw_free(encode_pkg);
+	}
+}

@@ -1,34 +1,32 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include<google/protobuf/message.h>
+#include "google/protobuf/message.h"
 
 #include "proto_man.h"
 
 #define MAX_PF_MAP_SIZE 1024
-#define CMD_HEAD 8
+#define CMD_HEADER 8
 
 static int g_proto_type = PROTO_BUF;
 static char* g_pf_map[MAX_PF_MAP_SIZE];
 static int g_cmd_count = 0;
 
-
-void 
+void
 proto_man::init(int proto_type) {
 	g_proto_type = proto_type;
 }
 
-int 
+int
 proto_man::proto_type() {
 	return g_proto_type;
 }
 
-void 
+void
 proto_man::register_pf_cmd_map(char** pf_map, int len) {
-	len = (MAX_PF_MAP_SIZE - g_cmd_count) < len ? (MAX_PF_MAP_SIZE - g_cmd_count) : len;
-	
+	len = (MAX_PF_MAP_SIZE - g_cmd_count) < len ? ((MAX_PF_MAP_SIZE - g_cmd_count)) : len;
+
 	for (int i = 0; i < len; i++) {
 		g_pf_map[g_cmd_count + i] = strdup(pf_map[i]);
 	}
@@ -57,41 +55,36 @@ release_message(google::protobuf::Message* m) {
 	delete m;
 }
 
-//stype(2 4byte) | ctype(24byte) | utag(4byte) | body
-bool 
+// stype(2 byte) | ctype(2byte) | utag(4byte) | body
+bool
 proto_man::decode_cmd_msg(unsigned char* cmd, int cmd_len, struct cmd_msg** out_msg) {
 	*out_msg = NULL;
 
-	if (cmd_len < CMD_HEAD) {
+	if (cmd_len < CMD_HEADER) {
 		return false;
 	}
 
 	struct cmd_msg* msg = (struct cmd_msg*)malloc(sizeof(struct cmd_msg));
-	memset(msg, 0, sizeof(struct cmd_msg));
 	msg->stype = cmd[0] | (cmd[1] << 8);
 	msg->ctype = cmd[2] | (cmd[3] << 8);
 	msg->utag = cmd[4] | (cmd[5] << 8) | (cmd[6] << 16) | (cmd[7] << 24);
 	msg->body = NULL;
+
 	*out_msg = msg;
-	if (cmd_len == CMD_HEAD) {
+	if (cmd_len == CMD_HEADER) {
 		return true;
 	}
-	
-	//TODO解密body
-	//end
 
 	if (g_proto_type == PROTO_JSON) {
-		int json_len = cmd_len - CMD_HEAD;
-		char* json_str = (char*)malloc(json_len + 1);//多加一个结尾符
-		memcpy(json_str, cmd + CMD_HEAD, json_len);
+		int json_len = cmd_len - CMD_HEADER;
+		char* json_str = (char*)malloc(json_len + 1);
+		memcpy(json_str, cmd + CMD_HEADER, json_len);
 		json_str[json_len] = 0;
+
 		msg->body = (void*)json_str;
 	}
-	else //protobuf
-	{
-		if (msg->ctype < 0 ||
-			msg->ctype >=g_cmd_count ||
-			g_pf_map[msg->ctype] == NULL) {
+	else { // protobuf
+		if (msg->ctype < 0 || msg->ctype >= g_cmd_count || g_pf_map[msg->ctype] == NULL) {
 			free(msg);
 			*out_msg = NULL;
 			return false;
@@ -104,29 +97,27 @@ proto_man::decode_cmd_msg(unsigned char* cmd, int cmd_len, struct cmd_msg** out_
 			return false;
 		}
 
-		if (!p_m->ParseFromArray(cmd+ CMD_HEAD,cmd_len- CMD_HEAD)){
+		if (!p_m->ParseFromArray(cmd + CMD_HEADER, cmd_len - CMD_HEADER)) {
 			free(msg);
 			*out_msg = NULL;
 			release_message(p_m);
 			return false;
 		}
+
 		msg->body = p_m;
 	}
 
 	return true;
 }
 
-
-
-void 
+void
 proto_man::cmd_msg_free(struct cmd_msg* msg) {
 	if (msg->body) {
 		if (g_proto_type == PROTO_JSON) {
 			free(msg->body);
 			msg->body = NULL;
 		}
-		else
-		{
+		else {
 			google::protobuf::Message* p_m = (google::protobuf::Message*) msg->body;
 			delete p_m;
 			msg->body = NULL;
@@ -136,7 +127,7 @@ proto_man::cmd_msg_free(struct cmd_msg* msg) {
 	free(msg);
 }
 
-unsigned char* 
+unsigned char*
 proto_man::encode_msg_to_raw(const struct cmd_msg* msg, int* out_len) {
 	int raw_len = 0;
 	unsigned char* raw_data = NULL;
@@ -146,37 +137,34 @@ proto_man::encode_msg_to_raw(const struct cmd_msg* msg, int* out_len) {
 	if (g_proto_type == PROTO_JSON) {
 		char* json_str = (char*)msg->body;
 		int len = strlen(json_str) + 1;
-		raw_data = (unsigned char*)malloc(CMD_HEAD + len);
-		memcpy(raw_data + CMD_HEAD, json_str, len - 1);
-		raw_data[8 +len] = 0;
-		*out_len = (len + CMD_HEAD);
+		raw_data = (unsigned char*)malloc(CMD_HEADER + len);
+		memcpy(raw_data + CMD_HEADER, json_str, len - 1);
+		raw_data[8 + len] = 0;
+		*out_len = (len + CMD_HEADER);
 	}
-	else //protobuf
-	{
-		google::protobuf::Message* p_m = (google::protobuf::Message*) msg->body;
+	else { // protobuf
+		google::protobuf::Message* p_m = (google::protobuf::Message*)msg->body;
 		int pf_len = p_m->ByteSize();
-		raw_data = (unsigned char*)malloc(CMD_HEAD + pf_len);
-		if (!p_m->SerializePartialToArray(raw_data + CMD_HEAD, pf_len)) {
+		raw_data = (unsigned char*)malloc(CMD_HEADER + pf_len);
+		if (!p_m->SerializePartialToArray(raw_data + CMD_HEADER, pf_len)) {
 			free(raw_data);
 			return NULL;
 		}
-		*out_len = (pf_len + CMD_HEAD);
-		
+		*out_len = (pf_len + CMD_HEADER);
 	}
-	//header
+
+	// header
 	raw_data[0] = (msg->stype & 0x000000ff);
-	raw_data[1] = (msg->stype & 0x0000ff00 >> 8);
-
+	raw_data[1] = ((msg->stype & 0x0000ff00) >> 8);
 	raw_data[2] = (msg->ctype & 0x000000ff);
-	raw_data[3] = (msg->ctype & 0x0000ff00 >> 8);
-
+	raw_data[3] = ((msg->ctype & 0x0000ff00) >> 8);
 	memcpy(raw_data + 4, &msg->utag, 4);
-	//end
+	// 
 
 	return raw_data;
 }
 
-void 
+void
 proto_man::msg_raw_free(unsigned char* raw) {
 	free(raw);
 }

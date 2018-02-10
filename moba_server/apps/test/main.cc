@@ -10,9 +10,19 @@ using namespace std;
 #include "../../netbus/netbus.h"
 #include "proto/pf_cmd_map.h"
 
+#include "../../utils/logger.h"
+#include "../../utils/time_list.h"
+
+static void on_logger_timer(void* update) {
+	log_debug("on_logger_timer");
+}
+
 int main(int argc, char** argv) {
 	proto_man::init(PROTO_BUF);
 	init_pf_cmd_map();
+
+	logger::init("logger/gateway/", "gateawy", true);
+	schedule(on_logger_timer, NULL, 3000, -1);
 
 
 	netbus::instance()->init();

@@ -41,6 +41,9 @@
     <Filter Include="apps\test\proto">
       <UniqueIdentifier>{1175fee0-bfc0-4c3b-ae0f-bb018670fa38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="database">
+      <UniqueIdentifier>{847b2774-2ff1-4fe7-a1f5-50aa624374b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\apps\test\main.cc">
@@ -199,6 +202,9 @@
     <ClCompile Include="..\..\netbus\udp_session.cc">
       <Filter>netbus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\database\mysql_wrapper.cc">
+      <Filter>database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rd\libuv\include\android-ifaddrs.h">
@@ -338,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="..\..\netbus\udp_session.h">
       <Filter>netbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\database\mysql_wrapper.h">
+      <Filter>database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

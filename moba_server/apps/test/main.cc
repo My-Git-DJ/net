@@ -16,6 +16,8 @@ using namespace std;
 #include "../../database/mysql_wrapper.h"
 #include "../../database/redis_wrapper.h"
 
+#include "../../lua_wrapper/lua_wrapper.h"
+
 static void on_logger_timer(void* update) {
 	log_debug("on_logger_timer");
 }
@@ -87,7 +89,7 @@ int main(int argc, char** argv) {
 	//schedule(on_logger_timer, NULL, 3000, -1);
 
 	//test_db();
-	test_redis();
+	//test_redis();
 
 
 	netbus::instance()->init();
@@ -95,6 +97,10 @@ int main(int argc, char** argv) {
 	netbus::instance()->start_ws_server(8001);
 	netbus::instance()->start_udp_server(8002);
 	
+	lua_wrapper::init();
+	lua_wrapper::exe_lua_file("./main.lua");
+
 	netbus::instance()->run();
+	lua_wrapper::exit();
 	return 0;
 }

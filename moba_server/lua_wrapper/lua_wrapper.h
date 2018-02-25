@@ -14,4 +14,7 @@ public:
 public:
 	static int execute_script_handler(int nHandler, int numArgs);
 	static void remove_script_handler(int nHandler);
+public:
+	static void reg_func2lua(const char* name, int(*c_func)(lua_State* L));
+
 };

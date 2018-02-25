@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 	proto_man::init(PROTO_BUF);
 	init_pf_cmd_map();
 
-	//logger::init("logger/gateway/", "gateawy", true);
+	logger::init("logger/gateway/", "gateawy", true);
 	//schedule(on_logger_timer, NULL, 3000, -1);
 
 	//test_db();

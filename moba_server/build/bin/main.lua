@@ -61,21 +61,21 @@ function PrintTable(table , level)
 
 end
 
-mysql_wrapper.connect("127.0.0.1",3306,"class_sql","root","123456",function(err,context)
+mysql_wrapper.connect("127.0.0.1",3306,"kbe","root","root",function(err,context)
 	if err then
 		print(err)
 		return 
 	end
 
-	-- mysql_wrapper.query(context, "select * from user", function(err,ret)
-	-- 	if err then
-	-- 		print(err)
-	-- 		return 
-	-- 	end
+	mysql_wrapper.query(context, "select * from kbe_accountinfos", function(err,ret)
+		if err then
+			print(err)
+			return 
+		end
 
-	-- 	print("success")
-	-- 	print(ret)
-	-- end)
+		print("success")
+		PrintTable(ret)
+	end)
 end)
 
 redis_wrapper.connect("127.0.0.1",6379,function(err,context)
@@ -88,14 +88,14 @@ redis_wrapper.connect("127.0.0.1",6379,function(err,context)
 
 	-- redis_wrapper.close_redis(context)
 	
-	-- redis_wrapper.query(context,"hmset 001002  name \"black\" age \"35\" ",function(err ,result)
-	-- 	if err then
-	-- 		print(err)
-	-- 		return
-	-- 	end
+	redis_wrapper.query(context,"hmset 001002  name \"black\" age \"35\" ",function(err ,result)
+		if err then
+			print(err)
+			return
+		end
 
-	-- 	print(result)
-	-- end)
+		print(result)
+	end)
 	
 
 	redis_wrapper.query(context,"hgetall 001002",function(err,result)

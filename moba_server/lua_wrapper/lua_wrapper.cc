@@ -7,6 +7,7 @@
 #include "tolua_fix.h"
 #include "lua_wrapper.h"
 #include "mysql_export_to_lua.h"
+#include "redis_export_to_lua.h"
 
 
 lua_State* g_lua_State = NULL;
@@ -101,6 +102,8 @@ lua_wrapper::init() {
 
 	//export mysql func
 	register_mysql_export(g_lua_State);
+	//
+	register_redis_export(g_lua_State);
 
 	//export log func
 	lua_wrapper::reg_func2lua("log_error", lua_log_error);

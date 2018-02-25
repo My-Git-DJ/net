@@ -17,6 +17,8 @@ extern "C"{
 
 #include "tolua_fix.h"
 
+#include "mysql_export_to_lua.h"
+
 
 static void
 on_open_cb(const char* err, void* context, void* udata) {
@@ -77,7 +79,7 @@ static void
 push_mysql_row(MYSQL_ROW row,int num) {
 	lua_newtable(lua_wrapper::lua_state());
 	int index = 1;
-	for (int i = 1; i < num; i++) {
+	for (int i = 0; i < num; i++) {
 		if (row[i] == NULL) {
 			lua_pushnil(lua_wrapper::lua_state());
 		}
@@ -125,8 +127,8 @@ lua_mysql_query(lua_State* tolua_S) {
 		goto lua_failed;
 	}
 
-	char* sql = (char*)tolua_tostring(tolua_S, 2, 0);
-	if (!sql) {
+	char* sql = (char*)tolua_tostring(tolua_S, 2, NULL);
+	if (sql == NULL) {
 		goto lua_failed;
 	}
 

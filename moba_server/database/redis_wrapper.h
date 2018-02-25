@@ -1,6 +1,6 @@
 #pragma once
 
-struct redisReply;
+#include <hiredis.h>
 
 class redis_wrapper {
 public:

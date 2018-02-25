@@ -23,7 +23,7 @@ static void on_logger_timer(void* update) {
 }
 
 static void 
-on_query_cb(const char* err, std::vector<std::vector<std::string>> *result) {
+on_query_cb(const char* err, MYSQL_RES* result, void* udata) {
 	if (err != NULL) {
 		printf("%s\n", err);
 		return;
@@ -33,7 +33,7 @@ on_query_cb(const char* err, std::vector<std::vector<std::string>> *result) {
 }
 
 static void
-on_open_cb(const char* err, void* context) {
+on_open_cb(const char* err, void* context,void* data) {
 	if (err != NULL) {
 		printf("%s\n", err);
 		return;

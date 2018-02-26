@@ -4,7 +4,7 @@
 
 #include "lua_wrapper.h"
 #include "../netbus/service.h"
-#include "../netbus/service.h"
+#include "../netbus/session.h"
 #include "../netbus/proto_man.h"
 #include "../netbus/service_man.h"
 #include "../utils/logger.h"

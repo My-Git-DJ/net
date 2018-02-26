@@ -9,6 +9,7 @@
 #include "mysql_export_to_lua.h"
 #include "redis_export_to_lua.h"
 #include "service_export_to_lua.h"
+#include "session_export_to_lua.h"
 
 
 lua_State* g_lua_State = NULL;
@@ -107,6 +108,8 @@ lua_wrapper::init() {
 	register_redis_export(g_lua_State);
 	//export service
 	register_service_export(g_lua_State);
+	//export session
+	register_session_export(g_lua_State);
 
 	//export log func
 	lua_wrapper::reg_func2lua("log_error", lua_log_error);

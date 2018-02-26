@@ -109,3 +109,16 @@ redis_wrapper.connect("127.0.0.1",6379,function(err,context)
 	end)
 
 end)
+
+
+local my_service = {
+	on_session_recv_cmd = function(session,msg)
+
+	end,
+	on_session_disconnect = function(session)
+		-- body
+	end
+}
+
+local ret = service_wrapper.register(100,my_service)
+print(ret)

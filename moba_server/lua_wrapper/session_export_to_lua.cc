@@ -27,7 +27,7 @@ extern "C"{
 #include "session_export_to_lua.h"
 
 static int
-lua_close(lua_State* tolua_S) {
+lua_session_close(lua_State* tolua_S) {
 	session* s = (session*)tolua_touserdata(tolua_S, 1, NULL);
 	if (s == NULL) {
 		goto lua_failed;
@@ -329,7 +329,7 @@ register_session_export(lua_State* tolua_S) {
 		tolua_module(tolua_S, "session", 0);
 		tolua_beginmodule(tolua_S, "session");
 
-		tolua_function(tolua_S, "close", lua_close);
+		tolua_function(tolua_S, "close", lua_session_close);
 		tolua_function(tolua_S, "send_msg", lua_send_msg);
 		tolua_function(tolua_S, "get_address", lua_get_address);
 		tolua_endmodule(tolua_S);

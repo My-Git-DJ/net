@@ -82,4 +82,6 @@ schedule_once(void(*on_timer)(void* udata),
 	return schedule_repeat(on_timer, udata, after_msec, 1, after_msec);
 }
 
-
+void* get_timer_udata(struct timer* t) {
+	return t->udata;
+}

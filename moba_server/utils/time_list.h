@@ -30,6 +30,7 @@ extern "C" {
 	              void* udata,
 				  int after_msec);
 
+	void* get_timer_udata(struct timer* t);
 
 #ifdef __cplusplus
 }

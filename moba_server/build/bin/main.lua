@@ -1,7 +1,8 @@
 print("hello world!!!")
 
-log_debug("hello world!!!")
-
+logger.debug("hello world!!!")
+logger.warning("warning")
+logger.error("error")
 
 -- function PrintTable( tbl , level, filteDefault)
 --   local msg = ""
@@ -60,7 +61,7 @@ function PrintTable(table , level)
   print(indent .. "}")
 
 end
-
+--[[
 mysql_wrapper.connect("127.0.0.1",3306,"kbe","root","root",function(err,context)
 	if err then
 		print(err)
@@ -77,7 +78,8 @@ mysql_wrapper.connect("127.0.0.1",3306,"kbe","root","root",function(err,context)
 		PrintTable(ret)
 	end)
 end)
-
+]]
+--[[
 redis_wrapper.connect("127.0.0.1",6379,function(err,context)
 	if (err) then
 		print(err)
@@ -88,6 +90,7 @@ redis_wrapper.connect("127.0.0.1",6379,function(err,context)
 
 	-- redis_wrapper.close_redis(context)
 	
+
 	redis_wrapper.query(context,"hmset 001002  name \"black\" age \"35\" ",function(err ,result)
 		if err then
 			print(err)
@@ -109,7 +112,7 @@ redis_wrapper.connect("127.0.0.1",6379,function(err,context)
 	end)
 
 end)
-
+]]
 
 local my_service = {
 	on_session_recv_cmd = function(session,msg)
@@ -122,3 +125,12 @@ local my_service = {
 
 local ret = service_wrapper.register(100,my_service)
 print(ret)
+
+local timer = scheduler.scheduler(function()
+	print("scheduler.scheduler call")
+end,5000,-1,1000)
+
+scheduler.once (function()
+	scheduler.cancel(timer)
+end,8000)
+

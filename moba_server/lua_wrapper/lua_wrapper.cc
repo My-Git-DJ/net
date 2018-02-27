@@ -12,6 +12,7 @@
 #include "redis_export_to_lua.h"
 #include "service_export_to_lua.h"
 #include "session_export_to_lua.h"
+#include "scheduler_export_to_lua.h"
 
 
 lua_State* g_lua_State = NULL;
@@ -246,6 +247,8 @@ lua_wrapper::init() {
 	register_service_export(g_lua_State);
 	//export session
 	register_session_export(g_lua_State);
+	//export scheduler
+	register_scheduler_export(g_lua_State);
 	
 }
 

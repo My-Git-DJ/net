@@ -13,6 +13,7 @@
 #include "service_export_to_lua.h"
 #include "session_export_to_lua.h"
 #include "scheduler_export_to_lua.h"
+#include "netbus_export_to_lua.h"
 
 
 lua_State* g_lua_State = NULL;
@@ -260,6 +261,8 @@ lua_wrapper::init() {
 	register_session_export(g_lua_State);
 	//export scheduler
 	register_scheduler_export(g_lua_State);
+	//export netbus
+	register_netbus_export(g_lua_State);
 	
 }
 

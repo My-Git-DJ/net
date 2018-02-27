@@ -93,12 +93,13 @@ int main(int argc, char** argv) {
 
 
 	netbus::instance()->init();
-	netbus::instance()->start_tcp_server(6080);
-	netbus::instance()->start_ws_server(8001);
-	netbus::instance()->start_udp_server(8002);
+	netbus::instance()->tcp_listen(6080);
+	netbus::instance()->ws_listen(8001);
+	netbus::instance()->udp_listen(8002);
 	
 	lua_wrapper::init();
-	lua_wrapper::exe_lua_file("./main.lua");
+	std::string file_name = "./main.lua";
+	lua_wrapper::do_file(file_name);
 
 	netbus::instance()->run();
 	lua_wrapper::exit();

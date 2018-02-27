@@ -228,14 +228,25 @@ register_logger_export(lua_State* tolua_S) {
 	return 0;
 }
 
+static int
+lua_add_search_path(lua_State* L) {
+	const char* path = luaL_checkstring(L, 1);
+	if (path) {
+		std::string str_path = path;
+		lua_wrapper::add_seatch_path(str_path);
+	}
+	return 0;
+}
+
+
 void 
 lua_wrapper::init() {
 	g_lua_State = luaL_newstate();
 	lua_atpanic(g_lua_State, lua_panic);// default abort
 
 	luaL_openlibs(g_lua_State);
-
 	toluafix_open(g_lua_State);
+	lua_wrapper::reg_func2lua("lua_add_search_path", lua_add_search_path);
 
 	//export log 
 	register_logger_export(g_lua_State);
@@ -261,9 +272,9 @@ lua_wrapper::exit() {
 }
 
 bool
-lua_wrapper::exe_lua_file(const char* lua_file) {
+lua_wrapper::do_file(std::string& lua_file) {
 
-	if (luaL_dofile(g_lua_State, lua_file)) {
+	if (luaL_dofile(g_lua_State, lua_file.c_str())) {
 		lua_log_error(g_lua_State);
 		return false;
 	}
@@ -368,4 +379,11 @@ void
 lua_wrapper::remove_script_handler(int nHandler)
 {
 	toluafix_remove_function_by_refid(g_lua_State, nHandler);
+}
+
+void 
+lua_wrapper::add_seatch_path(std::string& path) {
+	char strPath[1024] = { 0 };
+	sprintf(strPath, "local path = string.match([[%s]], [[(.*) / [^ / ] * $]])\n package.path = package.path ..[[; ]] ..path ..[[/ ? .lua; ]] ..path ..[[/ ? / init.lua]]\n", path.c_str());
+	luaL_dostring(g_lua_State, strPath);
 }

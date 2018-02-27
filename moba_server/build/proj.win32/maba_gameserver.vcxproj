@@ -164,6 +164,8 @@
     <ClCompile Include="..\..\database\redis_wrapper.cc" />
     <ClCompile Include="..\..\lua_wrapper\lua_wrapper.cc" />
     <ClCompile Include="..\..\lua_wrapper\mysql_export_to_lua.cc" />
+    <ClCompile Include="..\..\lua_wrapper\netbus_export_to_lua.cc" />
+    <ClCompile Include="..\..\lua_wrapper\proto_man_export_to_lua.cc" />
     <ClCompile Include="..\..\lua_wrapper\redis_export_to_lua.cc" />
     <ClCompile Include="..\..\lua_wrapper\scheduler_export_to_lua.cc" />
     <ClCompile Include="..\..\lua_wrapper\service_export_to_lua.cc" />
@@ -248,6 +250,8 @@
     <ClInclude Include="..\..\database\redis_wrapper.h" />
     <ClInclude Include="..\..\lua_wrapper\lua_wrapper.h" />
     <ClInclude Include="..\..\lua_wrapper\mysql_export_to_lua.h" />
+    <ClInclude Include="..\..\lua_wrapper\netbus_export_to_lua.h" />
+    <ClInclude Include="..\..\lua_wrapper\proto_man_export_to_lua.h" />
     <ClInclude Include="..\..\lua_wrapper\redis_export_to_lua.h" />
     <ClInclude Include="..\..\lua_wrapper\scheduler_export_to_lua.h" />
     <ClInclude Include="..\..\lua_wrapper\service_export_to_lua.h" />

@@ -17,6 +17,6 @@ public:
 	static void remove_script_handler(int nHandler);
 public:
 	static void reg_func2lua(const char* name, int(*c_func)(lua_State* L));
-	static void add_seatch_path(std::string& path);
+	static void add_search_path(std::string& path);
 
 };

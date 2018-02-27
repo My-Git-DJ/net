@@ -48,11 +48,11 @@ static int
 lua_register_protobuf_cmd_map(lua_State* L) {
 	std::map<int, std::string> cmd_map;
 	int n = luaL_len(L, 1);
-	if (n < 0) {
+	if (n <= 0) {
 		goto lua_failed;
 	}
 
-	for (int i = 0; i < n; i++) {
+	for (int i = 1; i < n; i++) {
 		lua_pushnumber(L, i);
 		lua_gettable(L, 1);
 		const char* name = luaL_checkstring(L, -1);

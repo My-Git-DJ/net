@@ -14,6 +14,7 @@
 #include "session_export_to_lua.h"
 #include "scheduler_export_to_lua.h"
 #include "netbus_export_to_lua.h"
+#include "proto_man_export_to_lua.h"
 
 
 lua_State* g_lua_State = NULL;
@@ -234,7 +235,7 @@ lua_add_search_path(lua_State* L) {
 	const char* path = luaL_checkstring(L, 1);
 	if (path) {
 		std::string str_path = path;
-		lua_wrapper::add_seatch_path(str_path);
+		lua_wrapper::add_search_path(str_path);
 	}
 	return 0;
 }
@@ -263,6 +264,8 @@ lua_wrapper::init() {
 	register_scheduler_export(g_lua_State);
 	//export netbus
 	register_netbus_export(g_lua_State);
+	//export proto_man
+	register_proto_man_export(g_lua_State);
 	
 }
 
@@ -385,8 +388,8 @@ lua_wrapper::remove_script_handler(int nHandler)
 }
 
 void 
-lua_wrapper::add_seatch_path(std::string& path) {
+lua_wrapper::add_search_path(std::string& path) {
 	char strPath[1024] = { 0 };
-	sprintf(strPath, "local path = string.match([[%s]], [[(.*) / [^ / ] * $]])\n package.path = package.path ..[[; ]] ..path ..[[/ ? .lua; ]] ..path ..[[/ ? / init.lua]]\n", path.c_str());
+	sprintf(strPath, "local path = string.match([[%s]],[[(.*)/[^/]*$]])\n package.path = package.path .. [[;]] .. path .. [[/?.lua;]] .. path .. [[/?/init.lua]]\n", path.c_str());
 	luaL_dostring(g_lua_State, strPath);
 }

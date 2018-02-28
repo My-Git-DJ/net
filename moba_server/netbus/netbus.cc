@@ -319,10 +319,10 @@ void netbus::ws_listen(int port) {
 }
 
 void netbus::run() {
-	service_man::init();
 	uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 }
 
 void netbus::init() {
+	service_man::init();
 	init_session_allocer();
 }

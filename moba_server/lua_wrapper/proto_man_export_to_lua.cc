@@ -52,7 +52,7 @@ lua_register_protobuf_cmd_map(lua_State* L) {
 		goto lua_failed;
 	}
 
-	for (int i = 1; i < n; i++) {
+	for (int i = 1; i <= n; i++) {
 		lua_pushnumber(L, i);
 		lua_gettable(L, 1);
 		const char* name = luaL_checkstring(L, -1);

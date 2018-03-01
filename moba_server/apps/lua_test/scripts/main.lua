@@ -26,4 +26,6 @@ netbus.udp_listen(8002)
 
 print("start service success !!!!")
 
-print("hello world!!!")
+local echo_server = require("echo_server")
+-- proto_man::register_protobuf_cmd_map(echo_server.stype,echo_server.service)
+service.register(echo_server.stype,echo_server.service)

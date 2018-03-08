@@ -45,7 +45,7 @@ extern "C" {
 	static void
 	after_write(uv_write_t* req, int status) {
 		if (status == 0) {
-			printf("write success\n");
+			//printf("write success\n");
 		}
 		// free(req);
 		cache_free(wr_allocer, req);

@@ -26,6 +26,10 @@ netbus.udp_listen(8002)
 
 print("start service success !!!!")
 
-local echo_server = require("echo_server")
--- proto_man::register_protobuf_cmd_map(echo_server.stype,echo_server.service)
-service.register(echo_server.stype,echo_server.service)
+local trm_server = require("trm_server")
+local ret = service.register(trm_server.stype,trm_server.service)
+if ret then
+	print("register trm service success !!!")
+else
+	print("register trm service failed !!!")
+end

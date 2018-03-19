@@ -20,7 +20,7 @@ using namespace std;
 extern "C" {
 	static void 
 	on_recv_client_cmd(session* s , unsigned char* body,int len){
-		printf("client command !!!!!\n ");
+		//printf("client command !!!!!\n ");
 
 		struct cmd_msg* msg = NULL;
 		if (proto_man::decode_cmd_msg(body, len, &msg)) {

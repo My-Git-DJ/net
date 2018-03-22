@@ -11,6 +11,11 @@ using namespace std;
 #include "udp_session.h"
 #include "proto_man.h"
 
+#include "../utils/small_alloc.h"
+
+#define my_malloc small_alloc
+#define my_free small_free
+
 void 
 udp_session::close() {
 
@@ -22,14 +27,14 @@ on_uv_udp_send_end(uv_udp_send_t* req, int status) {
 		
 	}
 
-	free(req);
+	my_free(req);
 }
 
 void 
 udp_session::send_data(unsigned char* body, int len) {
 	uv_buf_t w_buf;
 	w_buf = uv_buf_init((char*)body, len);
-	uv_udp_send_t* req = (uv_udp_send_t*)malloc(sizeof(uv_udp_send_t));
+	uv_udp_send_t* req = (uv_udp_send_t*)my_malloc(sizeof(uv_udp_send_t));
 
 	uv_udp_send(req, this->udp_handler, &w_buf, 1, this->addr, on_uv_udp_send_end);
 }

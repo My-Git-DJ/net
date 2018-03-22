@@ -338,8 +338,8 @@ register_session_export(lua_State* tolua_S) {
 	lua_getglobal(tolua_S, "_G");
 	if (lua_istable(tolua_S, -1)) {
 		tolua_open(tolua_S);
-		tolua_module(tolua_S, "session", 0);
-		tolua_beginmodule(tolua_S, "session");
+		tolua_module(tolua_S, "Session", 0);
+		tolua_beginmodule(tolua_S, "Session");
 
 		tolua_function(tolua_S, "close", lua_session_close);
 		tolua_function(tolua_S, "send_msg", lua_send_msg);

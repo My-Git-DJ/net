@@ -381,8 +381,8 @@ register_service_export(lua_State* tolua_S) {
 	lua_getglobal(tolua_S, "_G");
 	if (lua_istable(tolua_S, -1)) {
 		tolua_open(tolua_S);
-		tolua_module(tolua_S, "service", 0);
-		tolua_beginmodule(tolua_S, "service");
+		tolua_module(tolua_S, "Service", 0);
+		tolua_beginmodule(tolua_S, "Service");
 		
 		tolua_function(tolua_S, "register", lua_register_service);
 		tolua_endmodule(tolua_S);

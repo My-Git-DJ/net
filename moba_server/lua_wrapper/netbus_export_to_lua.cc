@@ -62,8 +62,8 @@ register_netbus_export(lua_State* tolua_S) {
 	lua_getglobal(tolua_S, "_G");
 	if (lua_istable(tolua_S, -1)) {
 		tolua_open(tolua_S);
-		tolua_module(tolua_S, "netbus", 0);
-		tolua_beginmodule(tolua_S, "netbus");
+		tolua_module(tolua_S, "Netbus", 0);
+		tolua_beginmodule(tolua_S, "Netbus");
 
 		tolua_function(tolua_S, "tcp_listen", lua_tcp_listen);
 		tolua_function(tolua_S, "ws_listen", lua_ws_listen);

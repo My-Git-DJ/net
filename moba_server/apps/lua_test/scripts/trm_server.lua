@@ -5,7 +5,7 @@ function broadcast_except(msg,except_session)
 	for i=1,#session_set do
 		if except_session ~= session_set[i] then --返回状态 -1
 			-- local msg = {1,2,0,{status = -1}}
-			session.send_msg(session_set[i],msg)
+			Session.send_msg(session_set[i],msg)
 			return 
 		end
 	end
@@ -16,17 +16,17 @@ function on_recv_login_cmd(s)
 	for i=1,#session_set do
 		if s == session_set[i] then --返回状态 -1
 			local msg = {1,2,0,{status = -1}}
-			session.send_msg(s,msg)
+			Session.send_msg(s,msg)
 			return 
 		end
 	end
 
 	table.insert(session_set,s)
 	local msg = {1,2,0,{status = 1}} --状态1 表示登陆成功
-	session.send_msg(s,msg)
+	Session.send_msg(s,msg)
 
 
-	local s_ip,s_port = session.get_address(s)
+	local s_ip,s_port = Session.get_address(s)
 	local msg_2 = {1,7,0,{ip=s_ip,port = s_port}}
 	--广播登录消息
 	broadcast_except(msg_2,s)
@@ -37,9 +37,9 @@ function on_recv_exit_cmd(s)
 		if s == session_set[i] then --返回状态 -1
 			table.remove(session_set,i)
 			local msg = {1,4,0,{status = 1}} --状态1 表示离开成功
-			session.send_msg(s,msg)
+			Session.send_msg(s,msg)
 
-			local s_ip,s_port = session.get_address(s)
+			local s_ip,s_port = Session.get_address(s)
 			msg = {1,8,0,{ip=s_ip,port = s_port}}
 			--广播用户离开消息
 			broadcast_except(msg,s)
@@ -48,7 +48,7 @@ function on_recv_exit_cmd(s)
 	end
 
 	local msg = {1,4,0,{status = -1}} --状态-1 表示离开的时候不在聊天室
-	session.send_msg(s,msg)
+	Session.send_msg(s,msg)
 
 end
 
@@ -57,9 +57,9 @@ function on_recv_send_msg_cmd(s,str)
 		if s == session_set[i] then --返回状态 -1
 			-- table.remove(session_set,i)
 			local msg = {1,6,0,{status = 1}} --状态1 表示发送成功
-			session.send_msg(s,msg)
+			Session.send_msg(s,msg)
 
-			local s_ip,s_port = session.get_address(s)
+			local s_ip,s_port = Session.get_address(s)
 			msg = {1,9,0,{ip=s_ip,port = s_port,content = str}}
 			--广播消息
 			broadcast_except(msg,s)
@@ -68,7 +68,7 @@ function on_recv_send_msg_cmd(s,str)
 	end
 
 	local msg = {1,6,0,{status = -1}} --状态1 表示发送失败
-	session.send_msg(s,msg)
+	Session.send_msg(s,msg)
 end
 
 --{stype,ctype,utag,body}
@@ -85,14 +85,14 @@ function on_trm_recv_cmd(s,msg)
 end
 
 function on_trm_session_disconnect(s)
-	local ip,port = session.get_address(s)
+	local ip,port = Session.get_address(s)
 
 	for i=1,#session_set do
 		if s == session_set[i] then --返回状态 -1
 			print("remove from talk room:  "..ip.."   "..port)
 			table.remove(session_set,i)
 
-			local s_ip,s_port = session.get_address(s)
+			local s_ip,s_port = Session.get_address(s)
 			local msg = {1,8,0,{ip=s_ip,port = s_port}}
 			--广播用户离开消息
 			broadcast_except(msg,s)

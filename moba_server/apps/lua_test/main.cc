@@ -18,6 +18,8 @@ int main(int argc, char** argv) {
 	netbus::instance()->init();
 	lua_wrapper::init();
 	
+	//netbus::instance()->tcp_connect("127.0.0.1", 7788, NULL, NULL);
+
 	if (argc != 3) {//测试
 		//启动第一个脚本
 		std::string search_path = "../../apps/lua_test/scripts/";

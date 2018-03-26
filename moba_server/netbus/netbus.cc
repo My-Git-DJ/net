@@ -357,7 +357,7 @@ after_connect(uv_connect_t* handle, int status) {
 }
 
 void 
-netbus::tcp_connect(char* server_ip, int port,
+netbus::tcp_connect(const char* server_ip, int port,
 					void(*on_connected)(int err, session* s, void* udata), void* udata) {
 	struct sockaddr_in bind_addr;
 	int iret = uv_ip4_addr(server_ip, port, &bind_addr);

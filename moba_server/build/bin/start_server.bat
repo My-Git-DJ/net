@@ -1,1 +1,0 @@
-maba_gameserver.exe ../../apps/lua_test/scripts/ main.lua

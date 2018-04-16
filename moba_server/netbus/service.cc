@@ -7,6 +7,11 @@
 
 #include "service.h"
 
+
+service::service() {
+	this->using_raw_cmd = false;
+}
+
 //return false ,close socket
 bool 
 service::on_session_recv_cmd(session* s, struct cmd_msg* msg) {
@@ -16,4 +21,9 @@ service::on_session_recv_cmd(session* s, struct cmd_msg* msg) {
 void 
 service::on_session_disconnect(session* s) {
 
+}
+
+bool 
+service::on_session_recv_raw_cmd(session* s, struct raw_cmd* msg) {
+	return false;
 }

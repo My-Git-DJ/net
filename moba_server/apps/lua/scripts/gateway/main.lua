@@ -30,7 +30,7 @@ print("Ws server listen At ".. game_config.gateway_ws_port)
 local services = game_config.servers
 local gw_service = require("gateway/gw_service")
 for k,v in pairs(services) do
-	local ret = Service.register(v.stype,gw_service)
+	local ret = Service.register_with_raw(v.stype,gw_service)
 	if ret then
 		print("register gw_service["..v.stype.. "] service success !!!")
 	else

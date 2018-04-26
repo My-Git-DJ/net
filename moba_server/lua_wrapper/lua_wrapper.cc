@@ -266,6 +266,8 @@ lua_wrapper::init() {
 	register_netbus_export(g_lua_State);
 	//export proto_man
 	register_proto_man_export(g_lua_State);
+
+	register_raw_cmd_export(g_lua_State);
 	
 }
 

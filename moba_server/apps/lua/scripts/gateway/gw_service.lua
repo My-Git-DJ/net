@@ -5,6 +5,13 @@ local server_session_man = {}
 --当前正在连接的服务器
 local do_connection = {}
 
+--临时的ukey来找client session
+local g_ukey = 1
+local client_session_ukey = {}
+-- uid 来找cleint session
+local client_session_uid = {}
+
+
 function connect_to_server(stype,ip,port)
 	Netbus.tcp_connect(ip,port,function(err,session)
 		do_connection[stype] = false
@@ -40,14 +47,19 @@ function gw_service_init()
 end
 
 function send_to_client(server_session,raw_cmd)
-
+	local stype,ctype,utag = RawCmd.read_head(raw_cmd)
+	local client_session = nil
+	-- 很有可能是uid 来做ket，同时需要排除掉不是 ukey 来做的
+	if client_session_uid[utag] ~= nil then
+		client_session = client_session_ukey[utag]
+	elseif client_session_ukey[utag] ~= nil then
+		client_session = client_session_ukey[utag]
+	end
+	RawCmd.set_utag(raw_cmd, 0)
+	if client_session then
+		Session.send_raw_cmd(client_session, raw_cmd)
+	end
 end
-
---临时的ukey来找client session
-local g_ukey = 1
-local client_session_ukey = {}
--- uid 来找cleint session
-local client_session_uid = {}
 
 --s来自于客户端
 function send_to_server(client_session,raw_cmd)
@@ -86,7 +98,7 @@ function on_gw_recv_raw_cmd(s,raw_cmd)
 	end
 end
 
-function on_gw_session_disconnect(s)
+function on_gw_session_disconnect(s, stype)
 	-- 连接到服务器的session断线了
 	if Session.asclient(s) == 1 then
 		for k,v in pairs(server_session_man) do
@@ -113,10 +125,14 @@ function on_gw_session_disconnect(s)
 	local uid = Session.get_uid(s)
 	if client_session_uid[uid] ~= nil then
 		client_session_uid[uid] = nil
-		Session.set_uid(s,0)
 		table.remove(client_session_uid,uid)
 	end
 	--end
+
+	-- 客户端uid 用户掉线了，我要吧这个事件告诉和网关连接的stype服务器
+	if uid ~= 0 then
+
+	end
 end
 
 gw_service_init()

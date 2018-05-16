@@ -115,9 +115,8 @@ function on_gw_session_disconnect(s, stype)
 	-- 吧客户端从临时映射表里面删除
 	local utag = Session.get_utag(s)
 	if client_session_ukey[utag] ~= nil then
-		client_session_ukey[utag] = nil 
+		client_session_ukey[utag] = nil -- 保证utag --> value 删除
 		Session.set_utag(s,0)
-		table.remove(client_session_ukey,utag)
 	end
 	-- end
 
@@ -125,7 +124,6 @@ function on_gw_session_disconnect(s, stype)
 	local uid = Session.get_uid(s)
 	if client_session_uid[uid] ~= nil then
 		client_session_uid[uid] = nil
-		table.remove(client_session_uid,uid)
 	end
 	--end
 

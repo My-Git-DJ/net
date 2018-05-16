@@ -165,13 +165,13 @@ proto_man::encode_msg_to_raw(const struct cmd_msg* msg, int* out_len) {
 		int len = 0;
 		if (msg->body) {
 			json_str = (char*)msg->body;
-			len = strlen(json_str) + 1;
+			len = strlen(json_str);
 		}
 		//raw_data = (unsigned char*)malloc(CMD_HEADER + len);
 		raw_data = (unsigned char*)cache_alloc(wbuf_allocer, CMD_HEADER + len);
 		if (msg->body != NULL) {
-			memcpy(raw_data + CMD_HEADER, json_str, len - 1);
-			raw_data[8 + len] = 0;
+			memcpy(raw_data + CMD_HEADER, json_str, len);
+			raw_data[CMD_HEADER + len] = 0;
 		}
 		*out_len = (len + CMD_HEADER);
 	}

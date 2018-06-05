@@ -25,6 +25,14 @@ local game_config = {
 	gateway_ws_port = 6081,
 
 	servers = remote_servers,
+
+	auth_center = {
+		host = "192.168.99.100",         --db host
+		port = 3306,              -- db port
+		db_name = "auth_center",  --db name
+		uname = "root",           --db account
+		upwd = "123456",          --db pwd
+	}
 }
 
 return game_config

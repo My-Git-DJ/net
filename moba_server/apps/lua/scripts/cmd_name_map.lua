@@ -1,16 +1,5 @@
 local cmd_name_map = {
-	"LoginReq",
-	"LoginRes",
-
-	"ExiteReq",
-	"ExiteRes",
-
-	"SendMsgReq",
-	"SendMsgRes",
-	
-	"OnUserLogin",
-	"OnUserExit",
-	"OnSendMsg"
+	"GuestLoginReq",
 }
 
 return cmd_name_map

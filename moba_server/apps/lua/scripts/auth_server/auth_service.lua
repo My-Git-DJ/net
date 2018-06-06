@@ -3,10 +3,7 @@ local Cmd = require("Cmd")
 
 --{stype,ctype,utag,body}
 function on_auth_recv_cmd(s,msg)
-	print(msg[1],msg[2],msg[3])
-
-	local res_msg = {Stype.Auth, Cmd.eLoginRes, msg[3], {status = 200}}
-	Session.send_msg(s, res_msg)
+	print(msg[1],msg[2],msg[3],msg[4].guest_key)
 
 end
 

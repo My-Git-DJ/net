@@ -175,12 +175,12 @@ void AddDescriptorsImpl() {
       " \002(\005\022\013\n\003uid\030\005 \002(\005\"\?\n\rGuestLoginRes\022\016\n\006st"
       "atus\030\001 \002(\005\022\036\n\005uinfo\030\002 \001(\0132\017.UserCenterIn"
       "fo*;\n\005Stype\022\021\n\rINVALID_STYPE\020\000\022\010\n\004Auth\020\001"
-      "\022\n\n\006System\020\002\022\t\n\005LOGIC\020\003*>\n\003Cmd\022\017\n\013INVALI"
+      "\022\n\n\006System\020\002\022\t\n\005LOGIC\020\003*_\n\003Cmd\022\017\n\013INVALI"
       "D_CMD\020\000\022\022\n\016eGuestLoginReq\020\001\022\022\n\016eGuestLog"
-      "inRes\020\002"
+      "inRes\020\002\022\014\n\010eRelogin\020\003\022\021\n\reUserLostConn\020\004"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 327);
+      descriptor, 360);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "game.proto", &protobuf_RegisterTypes);
 }
@@ -221,6 +221,8 @@ bool Cmd_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
+    case 4:
       return true;
     default:
       return false;

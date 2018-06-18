@@ -89,11 +89,13 @@ inline bool Stype_Parse(
 enum Cmd {
   INVALID_CMD = 0,
   eGuestLoginReq = 1,
-  eGuestLoginRes = 2
+  eGuestLoginRes = 2,
+  eRelogin = 3,
+  eUserLostConn = 4
 };
 bool Cmd_IsValid(int value);
 const Cmd Cmd_MIN = INVALID_CMD;
-const Cmd Cmd_MAX = eGuestLoginRes;
+const Cmd Cmd_MAX = eUserLostConn;
 const int Cmd_ARRAYSIZE = Cmd_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Cmd_descriptor();

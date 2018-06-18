@@ -10,7 +10,9 @@ local g_ukey = 1
 local client_session_ukey = {}
 -- uid 来找cleint session
 local client_session_uid = {}
-
+local Stype = require("Stype")
+local Cmd = require("Cmd")
+local Respones = require("Respones")
 
 function connect_to_server(stype,ip,port)
 	Netbus.tcp_connect(ip,port,function(err,session)
@@ -46,19 +48,62 @@ function gw_service_init()
 	--end
 end
 
+function is_login_return_cmd(ctype)
+	if ctype == Cmd.eGuestLoginRes then
+		return true
+	end
+	return false
+end
+
 function send_to_client(server_session,raw_cmd)
 	local stype,ctype,utag = RawCmd.read_head(raw_cmd)
 	local client_session = nil
-	-- 很有可能是uid 来做ket，同时需要排除掉不是 ukey 来做的
-	if client_session_uid[utag] ~= nil then
+
+	if is_login_return_cmd(ctype) then
 		client_session = client_session_ukey[utag]
-	elseif client_session_ukey[utag] ~= nil then
-		client_session = client_session_ukey[utag]
+		client_session_ukey[utag] = nil 
+		if client_session == nil then
+			return 
+		end
+
+		local body = RawCmd.read_body(raw_cmd)
+
+		if body.status ~= Respones.OK then	
+			RawCmd.set_utag(raw_cmd, 0)
+			Session.send_raw_cmd(client_session, raw_cmd)
+			return
+		end 
+
+		local uid = body.uinfo.uid
+		-- 判断是否有已经登陆的session
+		if client_session_uid[uid] ~= nil and client_session_uid[uid] ~= client_session then
+			local relogin_cmd = {Stype.Auth, Cmd.eRelogin,0,nil}
+			Session.send_msg(client_session_uid[uid], relogin_cmd)
+			Session.close(client_session_uid[uid])
+			-- client_session_uid[uid] = nil
+		end
+
+		client_session_uid[uid] = client_session
+		Session.set_uid(client_session, uid)
+
+		body.uinfo.uid = 0
+		local login_res = {stype, ctype,0,body}
+		Session.send_msg(client_session_uid[uid], login_res)
+		return
 	end
+
+	client_session = client_session_uid[utag]
 	RawCmd.set_utag(raw_cmd, 0)
 	if client_session then
 		Session.send_raw_cmd(client_session, raw_cmd)
 	end
+end
+
+function is_login_request_cmd(ctype)
+	if ctype == Cmd.eGuestLoginReq then
+		return true
+	end
+	return false
 end
 
 --s来自于客户端
@@ -70,20 +115,22 @@ function send_to_server(client_session,raw_cmd)
 		return 
 	end
 
-	local uid = Session.get_uid(client_session)
-	if uid == 0 then  -- 登陆以前
+	if is_login_request_cmd(ctype) then
 		utag = Session.get_utag(client_session)
 		if utag == 0 then
 			utag = g_ukey
 			g_ukey = g_ukey + 1
-			client_session_ukey[utag] = client_session
 			Session.set_utag(client_session, utag)
 		end
-	else  --登陆以后
+		client_session_ukey[utag] = client_session
+	else
+		local uid = Session.get_uid(client_session)
 		utag = uid
-		client_session_uid[utag] = client_session
+		if utag == 0 then -- 该操作要先登陆
+			return 
+		end
+		-- client_session_uid[uid] = client_session
 	end
-
 	-- 打上utag 然后转发给我们的服务器
 	RawCmd.set_utag(raw_cmd, utag)
 	Session.send_raw_cmd(server_session, raw_cmd)
@@ -114,7 +161,7 @@ function on_gw_session_disconnect(s, stype)
 	-- 连接到网关的客户端断线了
 	-- 吧客户端从临时映射表里面删除
 	local utag = Session.get_utag(s)
-	if client_session_ukey[utag] ~= nil then
+	if client_session_ukey[utag] ~= nil and client_session_ukey[utag] == s then
 		client_session_ukey[utag] = nil -- 保证utag --> value 删除
 		Session.set_utag(s,0)
 	end
@@ -122,14 +169,20 @@ function on_gw_session_disconnect(s, stype)
 
 	-- 吧客户端从uid 映射表里移除
 	local uid = Session.get_uid(s)
-	if client_session_uid[uid] ~= nil then
+	if client_session_uid[uid] ~= nil and client_session_uid[uid] == s then
 		client_session_uid[uid] = nil
 	end
 	--end
 
+	local server_session = server_session_man[stype]
+	if server_session == nil then
+		return 
+	end
+
 	-- 客户端uid 用户掉线了，我要吧这个事件告诉和网关连接的stype服务器
 	if uid ~= 0 then
-
+		local user_loset = {stype, Cmd.eUserLostConn,uid,nil}
+		Session.send_msg(server_session,user_loset)
 	end
 end
 

@@ -35,4 +35,5 @@ local game_config = {
 	}
 }
 
+
 return game_config

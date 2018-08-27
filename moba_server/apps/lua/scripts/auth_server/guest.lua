@@ -3,10 +3,22 @@ local Respones = require("Respones")
 local Stype = require("Stype")
 local Cmd = require("Cmd")
 
-function login(s,msg)
-	local g_key = msg[4].guest_key
-	local utag = msg[3]
-	print(msg[1],msg[2],msg[3],msg[4])
+function login(s,req)
+	local g_key = req[4].guest_key
+	local utag = req[3]
+	print(req[1],req[2],req[3],req[4])
+
+	-- 判断gkey的合法性，是否为字符串并且长度为32
+	if type(g_key) ~= "string" or string.len(g_key) ~= 32 then
+		local msg = {Stype.Auth, Cmd.eGuestLoginRes, utag, {
+			status = Respones.InvalidParams,
+		}}
+
+		Session.send_msg(s, msg)
+		return
+	end 
+	--end
+	
 	mysql_center.get_guest_uinfo(g_key, function(err, uinfo)
 		if err then  --告诉客户端错误信息
 			local msg = {Stype.Auth, Cmd.eGuestLoginRes, utag, {

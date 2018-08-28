@@ -39,7 +39,7 @@ function login(s,req)
 					return
 				end
 
-				login(s,msg)
+				login(s,req)
 			end)
 			return
 		end

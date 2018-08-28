@@ -23,7 +23,7 @@ public class user_login : Singletom<user_login> {
         }
 
         UserCenterInfo uinfo = res.uinfo;
-        ugame.Instance.save_uinfo(uinfo);
+        ugame.Instance.save_uinfo(uinfo, true);
 
         // 保存游戏的key到本地
         if (this.is_save_gkey)

@@ -5,8 +5,8 @@ using gprotocol;
 
 // 
 public class ugame : UnitySingletom<ugame> {
-    public string unick = null;
-    public int uface = 0;
+    public string unick = "";
+    public int uface = 1;
     public int usex = 0;
     public int uvip = 0;
     public bool is_guest = false;   //是不是 游客

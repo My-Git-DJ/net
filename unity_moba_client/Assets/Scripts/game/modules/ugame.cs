@@ -19,4 +19,11 @@ public class ugame : UnitySingletom<ugame> {
         this.uvip = uinfo.uvip;
         this.is_guest = is_guest;
     }
+
+    public void save_edit_profile(string unick, int uface, int usex)
+    {
+        this.unick = unick;
+        this.uface = uface;
+        this.usex = usex;
+    }
 }

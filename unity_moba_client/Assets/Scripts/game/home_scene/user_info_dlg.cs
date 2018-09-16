@@ -115,6 +115,7 @@ public class user_info_dlg : MonoBehaviour {
 
         Debug.Log(this.unick_edit.text + " " + this.uface + " " + this.usex);
         // 提交修改资料请求到服务器
+        user_login.Instance.edit_profile(this.unick_edit.text, this.uface, this.usex);
         //end
 
         this.on_close_uinfo_dlg_click();

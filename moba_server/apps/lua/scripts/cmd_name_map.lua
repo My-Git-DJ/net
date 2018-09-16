@@ -2,7 +2,9 @@ local cmd_name_map = {
 	"GuestLoginReq",
 	"GuestLoginRes",
 	"Relogin",
-	"UserLostConn"
+	"UserLostConn",
+	"EditProfileReq",
+	"EditProfileRes",
 }
 
 return cmd_name_map

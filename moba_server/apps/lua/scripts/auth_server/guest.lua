@@ -1,4 +1,6 @@
 local mysql_center = require("database/mysql_auth_center")
+local redis_center = require("database/redis_center")
+
 local Respones = require("Respones")
 local Stype = require("Stype")
 local Cmd = require("Cmd")
@@ -63,6 +65,9 @@ function login(s,req)
 		--end
 
 		print(uinfo.uid,uinfo.unick)  --登陆成功
+
+		redis_center.set_uinfo_inredis(uinfo.uid, uinfo)
+
 		local msg = {Stype.Auth, Cmd.eGuestLoginRes, utag,{
 			status = Respones.OK,
 			uinfo = {

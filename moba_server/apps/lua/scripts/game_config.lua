@@ -32,7 +32,12 @@ local game_config = {
 		db_name = "auth_center",  --db name
 		uname = "root",           --db account
 		upwd = "123456",          --db pwd
-	}
+	},
+	center_redis = {
+		host = "127.0.0.1",			--redis所在的host
+		port = 6379,				-- redis 端口
+		db_index = 1,				--数据1
+	},
 }
 
 

@@ -43,7 +43,7 @@ public class user_login : Singletom<user_login> {
         }
 
         UserCenterInfo uinfo = res.uinfo;
-        ugame.Instance.save_uinfo(uinfo, true);
+        ugame.Instance.save_uinfo(uinfo, true, this.g_key);
 
         // 保存游戏的key到本地
         if (this.is_save_gkey)
@@ -96,6 +96,15 @@ public class user_login : Singletom<user_login> {
         req.guest_key = g_key;
 
         network.Instance.send_protobuf_cmd((int)Stype.Auth, (int)Cmd.eGuestLoginReq, req);
+    }
+
+    public void do_account_upgrade(string uname, string upwd_md5)
+    {
+        AccountUpgradeReq req = new AccountUpgradeReq();
+        req.uname = uname;
+        req.upwd_md5 = upwd_md5;
+
+        network.Instance.send_protobuf_cmd((int)Stype.Auth, (int)Cmd.eAccountUpgradeReq, req);
     }
 
     public void edit_profile(string unick, int uface, int usex)

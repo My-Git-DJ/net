@@ -13,6 +13,11 @@ public class user_info_dlg : MonoBehaviour {
 
     public GameObject face_dlg = null;
 
+    public GameObject account_ugrade_dlg = null;
+    public InputField uname_edit;
+    public InputField upwd_edit;
+    public InputField upwd_edit_again;
+
     //private string now_unick = "";
     private int usex = 0;
     private int uface = 1;
@@ -65,6 +70,23 @@ public class user_info_dlg : MonoBehaviour {
 		
 	}
 
+    public void on_do_account_upgrade()
+    {
+        if (!ugame.Instance.is_guest)
+        {
+            return;
+        }
+        if(this.uname_edit.text.Length <=0 || this.upwd_edit.text.Length <=0 ||
+            !this.upwd_edit.text.Equals(this.upwd_edit_again.text))
+        {
+            Debug.Log("输入有误!!!" + this.upwd_edit.text.Equals(this.upwd_edit_again.text));
+            return;
+        }
+
+        string md5_pwd = utils.md5(this.upwd_edit.text);
+        user_login.Instance.do_account_upgrade(this.uname_edit.text, md5_pwd);
+    }
+
     public void on_sex_change(int usex)
     {
         this.usex = usex;
@@ -101,6 +123,17 @@ public class user_info_dlg : MonoBehaviour {
     {
         //this.gameObject.SetActive(false);
         GameObject.Destroy(this.gameObject);
+    }
+
+    public void on_show_account_upgrade()
+    {
+        this.account_ugrade_dlg.SetActive(true);
+
+    }
+
+    public void on_hide_account_upgrade()
+    {
+        this.account_ugrade_dlg.SetActive(false);
     }
 
     //

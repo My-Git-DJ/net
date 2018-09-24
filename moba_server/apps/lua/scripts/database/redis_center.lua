@@ -41,7 +41,6 @@ function set_uinfo_inredis(uid, uinfo)
 			Logger.error(err)
 			return
 		end
-		Logger.debug("success!!!")
 	end)
 end
 

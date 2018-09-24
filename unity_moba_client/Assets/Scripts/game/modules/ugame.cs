@@ -10,14 +10,16 @@ public class ugame : UnitySingletom<ugame> {
     public int usex = 0;
     public int uvip = 0;
     public bool is_guest = false;   //是不是 游客
+    public string guest_key = null;
 
-    public void save_uinfo(UserCenterInfo uinfo, bool is_guest)
+    public void save_uinfo(UserCenterInfo uinfo, bool is_guest, string guest_key = null)
     {
         this.unick = uinfo.unick;
         this.uface = uinfo.uface;
         this.usex = uinfo.usex;
         this.uvip = uinfo.uvip;
         this.is_guest = is_guest;
+        this.guest_key = guest_key;
     }
 
     public void save_edit_profile(string unick, int uface, int usex)

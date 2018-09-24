@@ -15,6 +15,9 @@ enum Cmd {
 	eUserLostConn = 4;
 	eEditProfileReq = 5;
 	eEditProfileRes = 6;
+
+	eAccountUpgradeReq = 7;
+	eAccountUpgradeRes = 8;
 }
 
 
@@ -42,5 +45,14 @@ message EditProfileReq{
 }
 
 message EditProfileRes{
+	required int32 status = 1;
+}
+
+message AccountUpgradeReq{
+	required string uname = 1;
+	required string upwd_md5 = 2;
+}
+
+message AccountUpgradeRes{
 	required int32 status = 1;
 }

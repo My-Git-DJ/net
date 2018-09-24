@@ -5,6 +5,8 @@ local Cmd = {
 	eUserLostConn = 4,
 	eEditProfileReq = 5,
 	eEditProfileRes = 6,
+	eAccountUpgradeReq = 7,
+	eAccountUpgradeRes = 8,
 }
 
 return Cmd

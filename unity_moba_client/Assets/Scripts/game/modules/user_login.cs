@@ -28,6 +28,16 @@ public class user_login : Singletom<user_login> {
         event_manager.Instance.dispatch_event("sync_uinfo", null);
     }
 
+    void on_guest_account_upgrade_return(cmd_msg msg)
+    {
+        AccountUpgradeRes res = proto_man.protobuf_deserialize<AccountUpgradeRes>(msg.body);
+        if (res.status == Respones.OK)
+        {
+            ugame.Instance.is_guest = false;
+        }
+        event_manager.Instance.dispatch_event("upgrade_account_return", res.status);
+    }
+
     void on_guest_login_return(cmd_msg msg)
     {
         GuestLoginRes res = proto_man.protobuf_deserialize<GuestLoginRes>(msg.body);
@@ -66,6 +76,9 @@ public class user_login : Singletom<user_login> {
                 break;
             case (int)Cmd.eEditProfileRes:
                 this.on_edit_profile_return(msg);
+                break;
+            case (int)Cmd.eAccountUpgradeRes:
+                this.on_guest_account_upgrade_return(msg);
                 break;
         }
     }

@@ -63,10 +63,31 @@ public class user_info_dlg : MonoBehaviour {
             this.womale_check.SetActive(true);
         }
 
+        // 监听我们的事件
+        event_manager.Instance.add_event_listener("upgrade_account_return", this.upgrade_account_return);
+        // end
+
     }
 	
-	// Update is called once per frame
-	void Update () {
+    void OnDestroy()
+    {
+        event_manager.Instance.remove_event_listener("upgrade_account_return", this.upgrade_account_return);
+    }
+
+    void upgrade_account_return(string name, object udata)
+    {
+        int status = (int)udata;
+        Debug.Log("status = " + status);
+        if(status == Respones.OK)
+        {
+            this.on_hide_account_upgrade();
+            this.guest_upgrade.SetActive(false);
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
